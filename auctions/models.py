@@ -11,7 +11,6 @@ class Auction_listing(models.Model):
     starting_bid = models.FloatField()
     img_url = models.URLField()
     category = models.CharField(max_length=64)
-    
 
 class Bids(models.Model):
     pass
