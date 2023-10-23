@@ -12,8 +12,15 @@ class Auction_listing(models.Model):
     img_url = models.URLField()
     category = models.CharField(max_length=64)
 
-class Bids(models.Model):
-    pass
+    def __str__(self):
+        return f"{self.title} | {self.starting_bid} | {self.category}"
 
-class Comments(models.Model):
+class Bid(models.Model):
+    item = models.ForeignKey(Auction_listing, on_delete=models.CASCADE, related_name="item")
+    bid_value = models.FloatField()
+
+    def __str__(self):
+        return f"{self.item.title} - {self.bid_value}"
+
+class Comment(models.Model):
     pass

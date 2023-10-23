@@ -8,5 +8,5 @@ class Auction_listingAdmin(admin.ModelAdmin):
 
 admin.site.register(User)
 admin.site.register(Auction_listing, Auction_listingAdmin)
-admin.site.register(Bids)
-admin.site.register(Comments)
+admin.site.register(Bid)
+admin.site.register(Comment)
