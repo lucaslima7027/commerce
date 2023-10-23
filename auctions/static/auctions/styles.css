@@ -1,3 +1,14 @@
 body {
     padding: 10px;
 }
+
+.auction-tile-link{
+    text-decoration: none;
+    color: black;
+}
+
+.auction-tile:hover, .auction-tile-link:hover{
+    text-decoration: none;
+    color: black;
+    border: 1px solid;
+}
