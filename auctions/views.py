@@ -9,7 +9,7 @@ from .models import *
 
 def index(request):
     return render(request, "auctions/index.html",{
-        "active_listings": Auction_listing.objects.all()
+        "active_listings": Bid.objects.all()
     })
 
 
@@ -78,9 +78,17 @@ def new_listing(request):
                                   img_url=img_url,
                                   category=category)
         listing.save()
+        starting_bid = Bid(item=listing, bid_value=listing.starting_bid)
+        starting_bid.save()
         return HttpResponseRedirect(reverse("index"))
 
     return render(request, "auctions/new_listing.html")
+
+def detail(request, item_title):
+    detailed_item = Bid.objects.get(item__title = item_title)
+    return render(request, "auctions/detail.html",{
+        "detailed_item": detailed_item
+    })
 
     
 

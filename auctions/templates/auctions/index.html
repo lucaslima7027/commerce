@@ -7,16 +7,16 @@
         <div class="row">
             {% for listing in active_listings %}
             <div class="col-6">
-                <a class="auction-tile-link" href="">
+                <a class="auction-tile-link" href="{% url "detail" listing.item.title %}">
                 <div class="container auction-tile">
                     <div class="row">
                         <div class="col-5">
-                            <img src="{{ listing.img_url }}" width="200px" height="200px" alt="{{ listing.title }}">
+                            <img src="{{ listing.item.img_url }}" width="200px" height="200px" alt="{{ listing.item.title }}">
                         </div>
                         <div class="col-7">
-                            <h2>{{ listing.title }}</h2>
-                            <p>{{ listing.description }}</p>
-                            <p>${{ listing.starting_bid }}</p>
+                            <h2>{{ listing.item.title }}</h2>
+                            <p>{{ listing.item.description }}</p>
+                            <p>${{ listing.bid_value }}</p>
                         </div>
                     </div>
                 </div>
