@@ -12,3 +12,7 @@ body {
     color: black;
     border: 1px solid;
 }
+
+.description > p {
+    font-size: 20px;
+}

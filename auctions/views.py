@@ -86,6 +86,24 @@ def new_listing(request):
 
 def detail(request, item_title):
     detailed_item = Bid.objects.get(item__title = item_title)
+    if request.method == "POST":
+        actual_bid = detailed_item.bid_value
+        bid_recived = float(request.POST["bid"])
+
+        if bid_recived > actual_bid:
+            detailed_item.bid_value=bid_recived
+            detailed_item.save()
+            return render(request, "auctions/detail.html",{
+        "detailed_item": detailed_item
+        })
+        
+        else:
+            message = "Your bid must be greater than current bid"
+            return render(request, "auctions/detail.html",{
+        "detailed_item": detailed_item,
+        "message": message
+    })
+    
     return render(request, "auctions/detail.html",{
         "detailed_item": detailed_item
     })

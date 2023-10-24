@@ -10,9 +10,21 @@
                     <div class="col-7">
                         <img src="{{ detailed_item.item.img_url }}" width="400px" height="400px" alt="{{ detailed_item.item.title }}">
                     </div>
-                    <div class="col-5">
+                    <div class="col-5 description">
                         <p>{{ detailed_item.item.description }}</p>
-                        <p>${{ detailed_item.bid_value }}</p>
+                        <h2>${{ detailed_item.bid_value }}</h2>
+                        {% if message %}
+                        <p>{{message}}</p>
+                        {% endif %}
+                        {% if user.is_authenticated %}
+                        <form action="" method="post">
+                            {% csrf_token %}
+                            <input type="number" step="0.01" name="bid" placeholder="Bid" >
+                            <input type="submit" value="Submit">
+                        </form>
+                        {% else %}
+                        <span><a href="{% url "login" %}">Sign in</a> or <a href="{% url "register" %}">Register</a> to bid</span>
+                        {% endif %}
                     </div>
                 </div>
             </div>
