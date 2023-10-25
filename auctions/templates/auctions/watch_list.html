@@ -1,0 +1,28 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Watch List</h2>
+    <div class="container">
+        <div class="row">
+            {% for auction in watch_list %}
+            <div class="col-6">
+                <a class="auction-tile-link" href="{% url "detail" auction.item.title %}">
+                <div class="container auction-tile">
+                    <div class="row">
+                        <div class="col-5">
+                            <img src="{{ auction.item.img_url }}" width="200px" height="200px" alt="">
+                        </div>
+                        <div class="col-7">
+                            <h2>{{ auction.item.title }}</h2>
+                            <p>{{ auction.item.description }}</p>
+                            <p>$ {{ auction.bid_value }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </a>
+            {% endfor %}
+            
+        </div>
+    </div>
+{% endblock %}

@@ -108,5 +108,14 @@ def detail(request, item_title):
         "detailed_item": detailed_item
     })
 
+def watch_list(request):
+    username = request.user.username
+    current_user = User.objects.get(username=username)
+    watch_list = current_user.watch_list.all()
+
+    return render(request, "auctions/watch_list.html", {
+        "watch_list": watch_list
+    })
+
     
 

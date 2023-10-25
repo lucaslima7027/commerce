@@ -1,10 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-
-class User(AbstractUser):
-    pass
-
 class Auction_listing(models.Model):
     title = models.CharField(max_length=64)
     description = models.CharField(max_length=64)
@@ -15,6 +11,7 @@ class Auction_listing(models.Model):
     def __str__(self):
         return f"{self.title} | {self.starting_bid} | {self.category}"
 
+
 class Bid(models.Model):
     item = models.ForeignKey(Auction_listing, on_delete=models.CASCADE, related_name="item")
     bid_value = models.FloatField()
@@ -24,3 +21,10 @@ class Bid(models.Model):
 
 class Comment(models.Model):
     pass
+
+class User(AbstractUser):
+    watch_list = models.ManyToManyField(Bid, blank=True, related_name="itens")
+
+    def __str__(self):
+        return f"{self.username} - {self.watch_list}"
+
