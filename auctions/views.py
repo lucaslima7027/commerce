@@ -97,10 +97,11 @@ def detail(request, item_title):
     if not watch_list.exists():
         in_watch_list = False
     else:
-        # Check if item is in Watch List !!!!!!!!!!!!!!!!ERROR HERE!!!!!!!!!!!!!!!!!!
+        # Check if item is in Watch List
         for auction in watch_list:
             if detailed_item.item.title == auction.item.title:
                 in_watch_list = True
+                break
             else:
                 in_watch_list = False 
 
