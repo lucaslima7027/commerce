@@ -3,6 +3,7 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.contrib import messages
 
 from .models import *
 
@@ -116,12 +117,12 @@ def detail(request, item_title):
         if bid_recived > actual_bid:
             detailed_item.bid_value=bid_recived
             detailed_item.save()
-            return render(request, "auctions/detail.html",{
-        "detailed_item": detailed_item
-        })
+            return HttpResponseRedirect(reverse('detail', kwargs={'item_title': detailed_item.item.title}))
         
         else:
             message = "Your bid must be greater than current bid"
+            messages.success(request, message)
+            return HttpResponseRedirect(reverse('detail', kwargs={'item_title': detailed_item.item.title,}))
             return render(request, "auctions/detail.html",{
         "detailed_item": detailed_item,
         "message": message

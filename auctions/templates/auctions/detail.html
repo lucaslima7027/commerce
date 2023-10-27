@@ -13,8 +13,12 @@
                     <div class="col-5 description">
                         <p>{{ detailed_item.item.description }}</p>
                         <h2>${{ detailed_item.bid_value }}</h2>
-                        {% if message %}
-                        <p>{{message}}</p>
+                        {% if messages %}
+                        <ul class="messages">
+                        {% for message in messages %}
+                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                        {% endfor %}
+                        </ul>
                         {% endif %}
                         {% if user.is_authenticated %}
                         <form action="" method="post">
