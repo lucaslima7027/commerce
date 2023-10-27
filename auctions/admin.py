@@ -3,11 +3,11 @@ from .models import *
 
 # Register your models here.
 
-class Auction_listingAdmin(admin.ModelAdmin):
+class AuctionListingAdmin(admin.ModelAdmin):
     list_display = ("title", "category")
 
 admin.site.register(User)
-admin.site.register(Auction_listing, Auction_listingAdmin)
+admin.site.register(AuctionListing, AuctionListingAdmin)
 admin.site.register(Bid)
 admin.site.register(Comment)
-admin.site.register(UserWL)
+admin.site.register(UsersWatchList)

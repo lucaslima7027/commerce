@@ -73,14 +73,18 @@ def new_listing(request):
         starting_bid = request.POST["starting_bid"]
         img_url = request.POST["img_url"]
         category = request.POST["category"]
+        creator = User.objects.get(username=request.user.username)
+        open = True
 
-        listing = Auction_listing(title=title,
+        listing = AuctionListing(title=title,
                                   description=description,
                                   starting_bid=starting_bid,
                                   img_url=img_url,
-                                  category=category)
+                                  category=category,
+                                  creator=creator,
+                                  open=open)
         listing.save()
-        starting_bid = Bid(item=listing, bid_value=listing.starting_bid)
+        starting_bid = Bid(item=listing, bid_value=listing.starting_bid, bidder=creator)
         starting_bid.save()
         return HttpResponseRedirect(reverse("index"))
 
@@ -89,9 +93,8 @@ def new_listing(request):
 
 def detail(request, item_title):
     detailed_item = Bid.objects.get(item__title = item_title)
-
-    username = request.user.username
-    current_user = UserWL.objects.get(username__username=username)
+    username = request.user.username # FIX BUG MATCHING QUERRY DOES NOT EXIST!!!!!!!!!!!
+    current_user = createWatchList(request, username)
     watch_list = current_user.watch_list.all()
     
     if not watch_list.exists():
@@ -132,7 +135,7 @@ def detail(request, item_title):
 
 def watch_list(request):
     username = request.user.username
-    current_user = UserWL.objects.get(username__username=username)
+    current_user = createWatchList(request, username)
     watch_list = current_user.watch_list.all()
 
     # Add or remove item from Watch List
@@ -152,6 +155,18 @@ def watch_list(request):
     return render(request, "auctions/watch_list.html", {
         "watch_list": watch_list
     })
+
+#Checks if the user has a watch list and creates one if not.
+def createWatchList(request, username):
+    username = request.user.username
+    try:
+        current_user = UsersWatchList.objects.get(username__username=username)
+    except UsersWatchList.DoesNotExist:
+        createUsersWL = UsersWatchList(username = User.objects.get(username=username))
+        createUsersWL.save()
+        current_user = UsersWatchList.objects.get(username__username=username)
+    return current_user
+
 
     
 
