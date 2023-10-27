@@ -93,7 +93,7 @@ def new_listing(request):
 
 def detail(request, item_title):
     detailed_item = Bid.objects.get(item__title = item_title)
-    username = request.user.username # FIX BUG MATCHING QUERRY DOES NOT EXIST!!!!!!!!!!!
+    username = request.user.username
     current_user = createWatchList(request, username)
     watch_list = current_user.watch_list.all()
     
