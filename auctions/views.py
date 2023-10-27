@@ -91,7 +91,7 @@ def detail(request, item_title):
     detailed_item = Bid.objects.get(item__title = item_title)
 
     username = request.user.username
-    current_user = User.objects.get(username=username)
+    current_user = UserWL.objects.get(username__username=username)
     watch_list = current_user.watch_list.all()
     
     if not watch_list.exists():
@@ -132,7 +132,7 @@ def detail(request, item_title):
 
 def watch_list(request):
     username = request.user.username
-    current_user = User.objects.get(username=username)
+    current_user = UserWL.objects.get(username__username=username)
     watch_list = current_user.watch_list.all()
 
     # Add or remove item from Watch List
