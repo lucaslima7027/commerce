@@ -18,7 +18,6 @@ class AuctionListing(models.Model):
 class Bid(models.Model):
     item = models.ForeignKey(AuctionListing, on_delete=models.CASCADE, related_name="item")
     bid_value = models.FloatField()
-    bidder = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, related_name="bidder_name")
     creator = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, related_name="creator_info")
     open = models.BooleanField()
     winner = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, related_name="winner_name")

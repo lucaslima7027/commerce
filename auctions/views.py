@@ -86,7 +86,7 @@ def new_listing(request):
                                   creator=creator,
                                   open=open)
         listing.save()
-        starting_bid = Bid(item=listing, bid_value=listing.starting_bid, bidder=creator)
+        starting_bid = Bid(item=listing, bid_value=listing.starting_bid, winner=creator)
         starting_bid.save()
         return HttpResponseRedirect(reverse("index"))
 
@@ -115,19 +115,24 @@ def detail(request, item_title):
 
     # Check if bid is valid
     if request.method == "POST":
-        actual_bid = detailed_item.bid_value
-        bid_recived = float(request.POST["bid"])
+        if request.POST["submit"]=="Bid":
+            actual_bid = detailed_item.bid_value
+            bid_recived = float(request.POST["bid"])
 
-        if bid_recived > actual_bid:
-            detailed_item.bid_value=bid_recived
-            detailed_item.save()
-            return HttpResponseRedirect(reverse('detail', kwargs={'item_title': detailed_item.item.title}))
+            if bid_recived > actual_bid:
+                detailed_item.bid_value = bid_recived
+                detailed_item.winner = request.user
+                detailed_item.save()
+                return HttpResponseRedirect(reverse('detail', kwargs={'item_title': detailed_item.item.title}))
         
-        else:
-            message = "Your bid must be greater than current bid"
-            messages.success(request, message)
-            return HttpResponseRedirect(reverse('detail', kwargs={'item_title': detailed_item.item.title,}))
-            
+            else:
+                message = "Your bid must be greater than current bid"
+                messages.success(request, message)
+                return HttpResponseRedirect(reverse('detail', kwargs={'item_title': detailed_item.item.title,}))
+        
+        if request.POST["submit"]=="Close Auction":
+            detailed_item.open=False
+            detailed_item.save()
     
     # Render detail view
     return render(request, "auctions/detail.html",{

@@ -20,11 +20,13 @@
                         {% endfor %}
                         </ul>
                         {% endif %}
+
+                        {% if detailed_item.open %}
                         {% if user.is_authenticated %}
                         <form action="" method="post">
                             {% csrf_token %}
                             <input type="number" step="0.01" name="bid" placeholder="Bid" >
-                            <input type="submit" value="Submit">
+                            <input name="submit" type="submit" value="Bid">
                         </form>
 
                         <form action="{% url "watch_list" %}" method="post">
@@ -35,17 +37,26 @@
                             <input type="submit" value="Remove from Watch List">
                             {% else %}
                             <input type="hidden" name="action" value="add">
-                            <input type="submit" value="Add to Watch List">
+                            <input name="submit" type="submit" value="Add to Watch List">
                             {% endif %}
                             
                         </form>
                         {% else %}
                         <span><a href="{% url "login" %}">Sign in</a> or <a href="{% url "register" %}">Register</a> to bid</span>
-                        {% if detailed_item.creator.username == user.username %}
-                        <p>you are the creator</p>
-                        {% else %}
-                        <p>you are not thee creator</p>
                         {% endif %}
+                        {% if detailed_item.creator.username == user.username %}
+                        {% if detailed_item.open %}
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" value="close">
+                            <input name="submit" type="submit" value="Close Auction">
+                        </form>
+                        {% endif %}
+                        {% endif %}
+                        {% endif %}
+
+                        {% if not detailed_item.open %}
+                        This auction is closed and the winner is {{detailed_item.winner}}
                         {% endif %}
 
                         
