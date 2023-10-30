@@ -41,7 +41,15 @@
                         </form>
                         {% else %}
                         <span><a href="{% url "login" %}">Sign in</a> or <a href="{% url "register" %}">Register</a> to bid</span>
+                        {% if detailed_item.creator.username == user.username %}
+                        <p>you are the creator</p>
+                        {% else %}
+                        <p>you are not thee creator</p>
                         {% endif %}
+                        {% endif %}
+
+                        
+                        
                     </div>
                 </div>
             </div>

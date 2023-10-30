@@ -4,6 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 from .models import *
 
@@ -94,20 +95,23 @@ def new_listing(request):
 
 def detail(request, item_title):
     detailed_item = Bid.objects.get(item__title = item_title)
-    username = request.user.username
-    current_user = createWatchList(request, username)
-    watch_list = current_user.watch_list.all()
+    if request.user.is_authenticated:
+        username = request.user.username
+        current_user = createWatchList(request, username)
+        watch_list = current_user.watch_list.all()
     
-    if not watch_list.exists():
-        in_watch_list = False
-    else:
+        if not watch_list.exists():
+            in_watch_list = False
+        else:
         # Check if item is in Watch List
-        for auction in watch_list:
-            if detailed_item.item.title == auction.item.title:
-                in_watch_list = True
-                break
-            else:
-                in_watch_list = False 
+            for auction in watch_list:
+                if detailed_item.item.title == auction.item.title:
+                    in_watch_list = True
+                    break
+                else:
+                    in_watch_list = False
+    else:
+        in_watch_list = False 
 
     # Check if bid is valid
     if request.method == "POST":
@@ -123,10 +127,7 @@ def detail(request, item_title):
             message = "Your bid must be greater than current bid"
             messages.success(request, message)
             return HttpResponseRedirect(reverse('detail', kwargs={'item_title': detailed_item.item.title,}))
-            return render(request, "auctions/detail.html",{
-        "detailed_item": detailed_item,
-        "message": message
-    })
+            
     
     # Render detail view
     return render(request, "auctions/detail.html",{
@@ -134,6 +135,7 @@ def detail(request, item_title):
         "in_watch_list": in_watch_list
     })
 
+@login_required
 def watch_list(request):
     username = request.user.username
     current_user = createWatchList(request, username)
@@ -159,14 +161,15 @@ def watch_list(request):
 
 #Checks if the user has a watch list and creates one if not.
 def createWatchList(request, username):
-    username = request.user.username
-    try:
-        current_user = UsersWatchList.objects.get(username__username=username)
-    except UsersWatchList.DoesNotExist:
-        createUsersWL = UsersWatchList(username = User.objects.get(username=username))
-        createUsersWL.save()
-        current_user = UsersWatchList.objects.get(username__username=username)
-    return current_user
+    if request.user.is_authenticated:
+        username = request.user.username
+        try:
+            current_user = UsersWatchList.objects.get(username__username=username)
+        except UsersWatchList.DoesNotExist:
+            createUsersWL = UsersWatchList(username = User.objects.get(username=username))
+            createUsersWL.save()
+            current_user = UsersWatchList.objects.get(username__username=username)
+        return current_user
 
 
     
