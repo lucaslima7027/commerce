@@ -174,6 +174,22 @@ def watch_list(request):
         "watch_list": watch_list
     })
 
+def categories(request):
+    all_categories = AuctionListing.objects.values_list("category", flat=True)
+    all_categories = set(all_categories)
+    return render(request, "auctions/categories.html",{
+                      "all_categories": all_categories
+                  } )
+
+def category(request, category):
+    all_itens = Bid.objects.filter(item__category = category)
+
+    return render(request, "auctions/index.html",{
+        "active_listings": all_itens
+    })
+
+    
+
 #Checks if the user has a watch list and creates one if not.
 def createWatchList(request, username):
     if request.user.is_authenticated:
@@ -185,6 +201,8 @@ def createWatchList(request, username):
             createUsersWL.save()
             current_user = UsersWatchList.objects.get(username__username=username)
         return current_user
+    
+
 
 
     
