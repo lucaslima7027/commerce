@@ -67,24 +67,30 @@
 
             <h2>Comments</h2>
             <div class="container">
+                {% if comments %}
                 {% for comment in comments %}
                 <div class="row">
                     <div class="col-12">
-                        <h3>{{ comment.person.username }}</h3>
+                        <h4>{{ comment.person.username }}</h4>
                         <p>{{ comment.comment }}</p>
                     </div>
                 </div>
                 {% endfor %}
 
+                {% else %}
+                <h4>No comments yet</h4>
+                {% endif %}
+
                 {% if user.is_authenticated %}
+                <h3>Leave a Comment</h3>
                 <form method="post">
                     {% csrf_token %}
-                    <input type="hidden" value="user.username">
-                    <label for="comment">Comment:</label>
-                    <textarea name="comment" cols="30" rows="5"></textarea><br>
+                    <input type="hidden" name="person" value="{{user.username}}">
+                    <textarea name="comment" cols="30" rows="3"></textarea><br>
+                    <input name="submit" type="submit" value="Send Comment">
                 </form>
                 {% else %}
-
+                <span><a href="{% url "login" %}">Sign in</a> or <a href="{% url "register" %}">Register</a> to comment</span>
                 {% endif %}
             </div>
 {% endblock body %}

@@ -132,6 +132,16 @@ def detail(request, item_title):
         if request.POST["submit"]=="Close Auction":
             detailed_item.open=False
             detailed_item.save()
+
+        if request.POST["submit"]=="Send Comment":
+            person = User.objects.get(username = request.POST["person"])
+            item = AuctionListing.objects.get(title = detailed_item.item.title)
+            new_comment = Comment(person = person,
+                                  item = item,
+                                  comment = request.POST["comment"]
+                                  )
+            new_comment.save()
+
     
     # Render detail view
     return render(request, "auctions/detail.html",{
