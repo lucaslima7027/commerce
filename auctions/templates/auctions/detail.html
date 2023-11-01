@@ -64,5 +64,28 @@
                     </div>
                 </div>
             </div>
+
+            <h2>Comments</h2>
+            <div class="container">
+                {% for comment in comments %}
+                <div class="row">
+                    <div class="col-12">
+                        <h3>{{ comment.person.username }}</h3>
+                        <p>{{ comment.comment }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+
+                {% if user.is_authenticated %}
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" value="user.username">
+                    <label for="comment">Comment:</label>
+                    <textarea name="comment" cols="30" rows="5"></textarea><br>
+                </form>
+                {% else %}
+
+                {% endif %}
+            </div>
 {% endblock body %}
 

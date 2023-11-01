@@ -35,5 +35,8 @@ class UsersWatchList(models.Model):
 
 
 class Comment(models.Model):
-    pass
+    person = models.ForeignKey("User", on_delete=models.CASCADE, blank=True)
+    item = models.ForeignKey("AuctionListing", on_delete=models.CASCADE, blank=True)
+    comment = models.TextField(max_length=64, blank=True)
+
 

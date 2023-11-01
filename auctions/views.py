@@ -76,17 +76,15 @@ def new_listing(request):
         img_url = request.POST["img_url"]
         category = request.POST["category"]
         creator = User.objects.get(username=request.user.username)
-        open = True
 
         listing = AuctionListing(title=title,
                                   description=description,
                                   starting_bid=starting_bid,
                                   img_url=img_url,
                                   category=category,
-                                  creator=creator,
-                                  open=open)
+                                  )
         listing.save()
-        starting_bid = Bid(item=listing, bid_value=listing.starting_bid, winner=creator)
+        starting_bid = Bid(item=listing, bid_value=listing.starting_bid, creator=creator, open=True, winner=creator)
         starting_bid.save()
         return HttpResponseRedirect(reverse("index"))
 
@@ -94,6 +92,7 @@ def new_listing(request):
     return render(request, "auctions/new_listing.html")
 
 def detail(request, item_title):
+    comments = Comment.objects.filter(item__title = item_title)
     detailed_item = Bid.objects.get(item__title = item_title)
     if request.user.is_authenticated:
         username = request.user.username
@@ -137,7 +136,8 @@ def detail(request, item_title):
     # Render detail view
     return render(request, "auctions/detail.html",{
         "detailed_item": detailed_item,
-        "in_watch_list": in_watch_list
+        "in_watch_list": in_watch_list,
+        "comments": comments
     })
 
 @login_required
